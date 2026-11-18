@@ -1,0 +1,10 @@
+node_modules
+.next
+out
+.env*.local
+.env
+*.tsbuildinfo
+next-env.d.ts
+
+# Original, unoptimised source images (kept locally, not needed by the site)
+design-source/
