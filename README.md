@@ -70,7 +70,7 @@ The original PNG screenshots and the original founder photo are kept in `design-
 
 | Variable | Scope | Purpose |
 | --- | --- | --- |
-| `NEXT_PUBLIC_SITE_URL` | public | Canonical origin, e.g. `https://yourdomain.com` (no trailing slash). **While empty, the site serves `noindex` and `robots.txt` disallows crawling**, so previews are never indexed. |
+| `NEXT_PUBLIC_SITE_URL` | public | Canonical origin, e.g. `https://yourdomain.com` (no trailing slash). Set it once you have a custom domain. **On Vercel production deployments it's detected automatically** (e.g. `https://anhtech.vercel.app`); preview deployments and local builds without it serve `noindex`, so they never appear in search results. |
 | `RESEND_API_KEY` | server only | API key for [Resend](https://resend.com) email delivery |
 | `CONTACT_TO_EMAIL` | server only | Inbox(es) that receive inquiries (comma-separated allowed) |
 | `CONTACT_FROM_EMAIL` | server only | Verified sender, e.g. `ANH Tech <noreply@yourdomain.com>` |

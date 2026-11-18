@@ -4,9 +4,10 @@ import { cn } from "@/lib/cn";
 /** Four-step visual timeline — horizontal on desktop, vertical rail on mobile. */
 export function ProcessTimeline({ steps, dark = false }: { steps: { title: string; text: string }[]; dark?: boolean }) {
   return (
-    <ol className="relative grid gap-0 md:grid-cols-2 lg:grid-cols-4">
-      {/* Desktop connecting rail */}
+    <div className="relative">
+      {/* Desktop connecting rail (outside the list so the <ol> only contains <li>) */}
       <span aria-hidden className={cn("absolute left-0 right-0 top-[1.375rem] hidden h-px lg:block", dark ? "bg-white/15" : "bg-line-strong")} />
+      <ol className="relative grid gap-0 md:grid-cols-2 lg:grid-cols-4">
       {steps.map((s, i) => (
         <Reveal as="li" key={s.title} delay={i * 0.1} className="relative pb-10 pl-14 md:pr-8 lg:pb-0 lg:pl-0">
           {/* Mobile rail */}
@@ -29,6 +30,7 @@ export function ProcessTimeline({ steps, dark = false }: { steps: { title: strin
           <p className={cn("mt-3 max-w-xs text-[0.95rem] leading-relaxed", dark ? "text-white/65" : "text-ink-soft")}>{s.text}</p>
         </Reveal>
       ))}
-    </ol>
+      </ol>
+    </div>
   );
 }

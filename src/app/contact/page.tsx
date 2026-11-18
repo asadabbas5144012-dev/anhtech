@@ -33,7 +33,7 @@ export default function ContactPage() {
   return (
     <>
       <section className="relative overflow-hidden pb-12 pt-32 sm:pt-36 lg:pt-44">
-        <div aria-hidden className="bg-grid pointer-events-none absolute inset-0 [mask-image:radial-gradient(ellipse_70%_60%_at_80%_0%,black,transparent)]" />
+        <div aria-hidden className="grid-fade pointer-events-none absolute inset-0 [--fade:radial-gradient(ellipse_70%_60%_at_80%_0%,transparent,var(--color-canvas))]" />
         <div className="container-x relative">
           <Breadcrumbs items={[{ name: "Contact", path: "/contact" }]} />
           <div className="mt-10 max-w-5xl">
@@ -41,12 +41,12 @@ export default function ContactPage() {
             <h1 className="display-lg mt-6">
               <RevealWords text="Let's Build Something Great Together." />
             </h1>
-            <Reveal delay={0.2}>
+            <div>
               <p className="lead mt-7 max-w-2xl">
                 Tell us about your idea, business challenge, or next digital project. We&apos;ll review your requirements and discuss the right approach.
               </p>
               <Availability className="mt-7" />
-            </Reveal>
+            </div>
           </div>
         </div>
       </section>

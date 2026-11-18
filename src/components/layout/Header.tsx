@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ChevronDown, Menu, X, ArrowUpRight } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { ButtonLink } from "@/components/ui/Button";
@@ -21,7 +20,6 @@ export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileServices, setMobileServices] = useState(false);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const reduce = useReducedMotion();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -85,7 +83,7 @@ export function Header() {
 
         {/* Desktop navigation */}
         <nav aria-label="Main" className="hidden lg:block">
-          <ul className="flex items-center gap-1 rounded-full border border-line bg-paper/70 p-1 backdrop-blur">
+          <ul className="flex items-center gap-1 rounded-full border border-line bg-paper/90 p-1">
             {mainNav.map((item) => {
               const active = isActive(item.href);
               if ("hasMenu" in item && item.hasMenu) {
@@ -149,17 +147,12 @@ export function Header() {
       </div>
 
       {/* Desktop mega-menu */}
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
+      {menuOpen && (
+          <div
             id="services-menu"
-            initial={reduce ? false : { opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={reduce ? { opacity: 0 } : { opacity: 0, y: -8 }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
             onMouseEnter={openMenu}
             onMouseLeave={scheduleClose}
-            className="absolute inset-x-0 top-full hidden border-b border-line bg-canvas shadow-[0_30px_60px_-30px_rgb(23_25_24/0.25)] lg:block"
+            className="animate-drop absolute inset-x-0 top-full hidden border-b border-line bg-canvas shadow-[0_30px_60px_-30px_rgb(23_25_24/0.25)] lg:block"
           >
             <div className="container-x grid grid-cols-12 gap-8 py-8">
               <div className="col-span-9 grid grid-cols-3 gap-x-6">
@@ -209,22 +202,16 @@ export function Header() {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
 
     </header>
 
       {/* Mobile navigation sheet (outside <header>: its backdrop-filter would trap position:fixed) */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
+      {mobileOpen && (
+          <div
             id="mobile-menu"
-            initial={reduce ? false : { opacity: 0, clipPath: "inset(0 0 100% 0)" }}
-            animate={{ opacity: 1, clipPath: "inset(0 0 0% 0)" }}
-            exit={reduce ? { opacity: 0 } : { opacity: 0, clipPath: "inset(0 0 100% 0)" }}
-            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-40 overflow-y-auto bg-canvas pt-[4.5rem] lg:hidden"
+            className="animate-sheet fixed inset-0 z-40 overflow-y-auto bg-canvas pt-[4.5rem] lg:hidden"
           >
             <nav
               aria-label="Mobile"
@@ -239,11 +226,10 @@ export function Header() {
             >
               <ul className="divide-y divide-line border-b border-line">
                 {mainNav.map((item, i) => (
-                  <motion.li
+                  <li
                     key={item.href}
-                    initial={reduce ? false : { opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.08 + i * 0.05, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                    className="animate-rise"
+                    style={{ animationDelay: `${0.05 + i * 0.04}s` }}
                   >
                     {"hasMenu" in item && item.hasMenu ? (
                       <div>
@@ -288,7 +274,7 @@ export function Header() {
                         <ArrowUpRight aria-hidden className="h-5 w-5 text-muted" />
                       </Link>
                     )}
-                  </motion.li>
+                  </li>
                 ))}
               </ul>
               <div className="mt-auto pt-8">
@@ -297,9 +283,8 @@ export function Header() {
                 </ButtonLink>
               </div>
             </nav>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
     </>
   );
 }

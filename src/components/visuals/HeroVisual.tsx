@@ -1,65 +1,44 @@
 "use client";
 
-import { motion, useMotionValue, useReducedMotion, useSpring, useTransform, type MotionValue } from "framer-motion";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { useRef } from "react";
 import { cn } from "@/lib/cn";
 
-function Layer({
-  children,
-  depth,
-  mx,
-  my,
-  className,
-  delay = 0,
-}: {
-  children: ReactNode;
-  depth: number;
-  mx: MotionValue<number>;
-  my: MotionValue<number>;
-  className?: string;
-  delay?: number;
-}) {
-  const x = useTransform(mx, (v) => v * depth);
-  const y = useTransform(my, (v) => v * depth);
-  const reduce = useReducedMotion();
+/** A parallax layer: offset follows the --mx/--my pointer variables set on the container. */
+function Layer({ children, depth, className }: { children: ReactNode; depth: number; className?: string; delay?: number }) {
+  const style = {
+    transform: `translate3d(calc(var(--mx, 0) * ${depth}px), calc(var(--my, 0) * ${depth}px), 0)`,
+  } as CSSProperties;
   return (
-    <motion.div style={reduce ? undefined : { x, y }} className={cn("absolute", className)}>
-      <motion.div
-        className="h-full w-full"
-        initial={reduce ? false : { opacity: 0, y: 30, scale: 0.97 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 1.1, delay, ease: [0.16, 1, 0.3, 1] }}
-      >
-        {children}
-      </motion.div>
-    </motion.div>
+    <div style={style} className={cn("absolute transition-transform duration-700 ease-out motion-reduce:!transform-none", className)}>
+      {children}
+    </div>
   );
 }
 
 /**
  * Art-directed hero composition: the intersection of engineering (code),
  * creativity (design system) and growth (performance UI), layered over a
- * technical grid. Reacts subtly to pointer movement; static for reduced motion.
+ * technical grid. Reacts subtly to mouse movement; static for reduced motion.
+ * No animation library: pointer position is written to CSS variables.
  */
 export function HeroVisual() {
   const ref = useRef<HTMLDivElement>(null);
-  const reduce = useReducedMotion();
-  const rawX = useMotionValue(0);
-  const rawY = useMotionValue(0);
-  const mx = useSpring(rawX, { stiffness: 60, damping: 18 });
-  const my = useSpring(rawY, { stiffness: 60, damping: 18 });
+  const frame = useRef(0);
 
-  const onMove = (e: React.PointerEvent) => {
-    if (reduce || e.pointerType !== "mouse" || !ref.current) return;
-    const r = ref.current.getBoundingClientRect();
-    rawX.set(((e.clientX - r.left) / r.width - 0.5) * 2);
-    rawY.set(((e.clientY - r.top) / r.height - 0.5) * 2);
+  const setVars = (x: number, y: number) => {
+    cancelAnimationFrame(frame.current);
+    frame.current = requestAnimationFrame(() => {
+      ref.current?.style.setProperty("--mx", x.toFixed(3));
+      ref.current?.style.setProperty("--my", y.toFixed(3));
+    });
   };
-  const onLeave = () => {
-    rawX.set(0);
-    rawY.set(0);
+  const onMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType !== "mouse") return;
+    const r = e.currentTarget.getBoundingClientRect();
+    setVars(((e.clientX - r.left) / r.width - 0.5) * 2, ((e.clientY - r.top) / r.height - 0.5) * 2);
   };
+  const onLeave = () => setVars(0, 0);
 
   return (
     <div
@@ -70,7 +49,7 @@ export function HeroVisual() {
       className="relative mx-auto aspect-[4/4.3] w-full max-w-[36rem] select-none sm:aspect-[5/4.6]"
     >
       {/* Core panel */}
-      <Layer depth={-6} mx={mx} my={my} className="inset-[6%_4%_8%_10%]">
+      <Layer depth={-6} className="inset-[6%_4%_8%_10%]">
         <div className="on-dark relative h-full w-full overflow-hidden rounded-[1.75rem] bg-forest shadow-[0_40px_80px_-40px_rgb(24_61_50/0.7)]">
           <div className="bg-grid-dark absolute inset-0" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgb(200_241_105/0.18),transparent_55%)]" />
@@ -95,7 +74,7 @@ export function HeroVisual() {
       </Layer>
 
       {/* Code editor fragment */}
-      <Layer depth={14} mx={mx} my={my} delay={0.25} className="left-0 top-[1%] w-[64%] sm:w-[58%]">
+      <Layer depth={14} delay={0.25} className="left-0 top-[1%] w-[64%] sm:w-[58%]">
         <div className="animate-float overflow-hidden rounded-2xl border border-line bg-paper shadow-[0_24px_50px_-24px_rgb(23_25_24/0.35)]">
           <div className="flex items-center gap-1.5 border-b border-line px-3.5 py-2.5">
             <span className="h-2 w-2 rounded-full bg-line-strong" />
@@ -120,7 +99,7 @@ export function HeroVisual() {
       </Layer>
 
       {/* Product UI preview */}
-      <Layer depth={22} mx={mx} my={my} delay={0.4} className="right-0 top-[34%] w-[46%] sm:w-[42%]">
+      <Layer depth={22} delay={0.4} className="right-0 top-[34%] w-[46%] sm:w-[42%]">
         <div className="animate-float-slow rounded-2xl border border-line bg-paper p-3.5 shadow-[0_24px_50px_-24px_rgb(23_25_24/0.4)]">
           <div className="flex items-center justify-between">
             <span className="h-1.5 w-12 rounded-full bg-ink/70" />
@@ -143,7 +122,7 @@ export function HeroVisual() {
       </Layer>
 
       {/* Design system fragment */}
-      <Layer depth={18} mx={mx} my={my} delay={0.55} className="bottom-[2%] left-[2%] w-[48%] sm:w-[42%]">
+      <Layer depth={18} delay={0.55} className="bottom-[2%] left-[2%] w-[48%] sm:w-[42%]">
         <div className="rounded-2xl border border-line bg-paper p-3.5 shadow-[0_24px_50px_-24px_rgb(23_25_24/0.35)]">
           <div className="flex items-end justify-between">
             <span className="font-display text-[2rem] font-extrabold leading-none tracking-[-0.05em] text-ink sm:text-[2.4rem]">Aa</span>
@@ -158,7 +137,7 @@ export function HeroVisual() {
       </Layer>
 
       {/* Growth chip */}
-      <Layer depth={28} mx={mx} my={my} delay={0.7} className="bottom-[14%] right-[3%]">
+      <Layer depth={28} delay={0.7} className="bottom-[14%] right-[3%]">
         <div className="on-dark flex items-center gap-2.5 rounded-full border border-white/10 bg-ink py-2 pl-2 pr-4 text-white shadow-[0_20px_40px_-20px_rgb(23_25_24/0.6)]">
           <span className="flex h-7 w-7 items-center justify-center rounded-full bg-lime">
             <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="#171918" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">

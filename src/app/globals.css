@@ -8,7 +8,7 @@
   --color-paper: #ffffff;
   --color-ink: #171918;
   --color-ink-soft: #3f4440; /* body copy — AA contrast on canvas */
-  --color-muted: #737873; /* secondary text, captions, large text */
+  --color-muted: #686d68; /* secondary text — darkened from #737873 to pass WCAG AA (≈5:1) */
   --color-forest: #183d32;
   --color-forest-deep: #112c24;
   --color-forest-soft: #24503f;
@@ -145,6 +145,26 @@
       linear-gradient(to bottom, rgb(255 255 255 / 0.06) 1px, transparent 1px);
     background-size: 48px 48px;
   }
+  /*
+   * Technical grid that fades out via a gradient overlay painted in the
+   * section colour. Visually equivalent to mask-image, but far cheaper to
+   * render (no offscreen mask layer). Set the fade with --fade.
+   */
+  .grid-fade,
+  .grid-fade-dark {
+    --line: rgb(23 25 24 / 0.055);
+    background-image:
+      var(--fade, linear-gradient(transparent, transparent)),
+      linear-gradient(to right, var(--line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+    background-size:
+      100% 100%,
+      48px 48px,
+      48px 48px;
+  }
+  .grid-fade-dark {
+    --line: rgb(255 255 255 / 0.06);
+  }
   .bg-dots {
     background-image: radial-gradient(rgb(23 25 24 / 0.14) 1px, transparent 1px);
     background-size: 18px 18px;
@@ -168,6 +188,74 @@
   .link-underline:focus-visible {
     background-size: 100% 1px;
   }
+}
+
+/* Scroll reveal (see RevealObserver). Content stays visible without JS. */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 24px, 0);
+  transition:
+    opacity 0.8s var(--ease-out-expo),
+    transform 0.8s var(--ease-out-expo);
+}
+.js [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .js [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Above-the-fold entrance: transform only, never hidden, so LCP paints immediately. */
+@keyframes rise {
+  from {
+    transform: translate3d(0, 14px, 0);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes sheet-in {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+@keyframes drop-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -8px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.animate-rise {
+  animation: rise 0.9s var(--ease-out-expo) both;
+}
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out both;
+}
+.animate-sheet {
+  animation: sheet-in 0.5s var(--ease-out-expo) both;
+}
+.animate-drop {
+  animation: drop-in 0.3s var(--ease-out-expo) both;
 }
 
 @keyframes marquee {
@@ -203,24 +291,30 @@
   }
 }
 
-.animate-marquee {
+/* Decorative loops start shortly after load (html.anim-on, set by the inline
+   script) so they never compete with initial rendering and interactivity. */
+.anim-on .animate-marquee {
   animation: marquee 40s linear infinite;
 }
-.animate-float {
+.anim-on .animate-float {
   animation: float-y 7s ease-in-out infinite;
 }
-.animate-float-slow {
+.anim-on .animate-float-slow {
   animation: float-y 9s ease-in-out infinite;
   animation-delay: -3s;
 }
-.animate-pulse-ring {
+.anim-on .animate-pulse-ring {
   animation: pulse-ring 2s var(--ease-out-expo) infinite;
 }
-.animate-blink {
+.anim-on .animate-blink {
   animation: blink 1.1s steps(1) infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .animate-rise,
+  .animate-fade-in,
+  .animate-sheet,
+  .animate-drop,
   .animate-marquee,
   .animate-float,
   .animate-float-slow,

@@ -30,8 +30,11 @@ export default function PortfolioPage() {
         </ButtonLink>
       </PageHero>
 
-      <section aria-label="Projects" className="border-t border-line pb-24 pt-16 lg:pb-32">
+      <section aria-labelledby="projects-title" className="border-t border-line pb-24 pt-16 lg:pb-32">
         <div className="container-x">
+          <h2 id="projects-title" className="sr-only">
+            Projects
+          </h2>
           {hasConcepts && (
             <Reveal>
               <p className="flex max-w-3xl items-start gap-3 rounded-2xl border border-dashed border-line-strong bg-paper px-5 py-4 text-[0.9rem] leading-relaxed text-ink-soft">

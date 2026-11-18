@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function NotFound() {
   return (
     <section className="relative flex min-h-[80vh] items-center overflow-hidden pb-24 pt-36">
-      <div aria-hidden className="bg-grid pointer-events-none absolute inset-0 [mask-image:radial-gradient(ellipse_60%_60%_at_50%_40%,black,transparent)]" />
+      <div aria-hidden className="grid-fade pointer-events-none absolute inset-0 [--fade:radial-gradient(ellipse_60%_60%_at_50%_40%,transparent,var(--color-canvas))]" />
       <div className="container-x relative text-center">
         <p className="font-mono text-sm text-forest">Error 404</p>
         <h1 className="display-xl mx-auto mt-6 max-w-4xl">

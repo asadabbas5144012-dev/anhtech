@@ -22,12 +22,11 @@ export function Logo({ className, inverted = false }: { className?: string; inve
   return (
     <Link
       href="/"
-      aria-label="ANH Tech — home"
       className={cn("group inline-flex items-center gap-2.5 rounded-lg", inverted && "on-dark", className)}
     >
       <LogoMark inverted={inverted} className="transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:-rotate-6" />
       <span className={cn("font-display text-[1.2rem] font-extrabold tracking-[-0.03em]", inverted ? "text-white" : "text-ink")}>
-        ANH<span className={cn("ml-1 font-semibold", inverted ? "text-lime" : "text-forest")}>Tech</span>
+        ANH{" "}<span className={cn("font-semibold", inverted ? "text-lime" : "text-forest")}>Tech</span>
       </span>
     </Link>
   );

@@ -16,7 +16,7 @@ export function Footer() {
 
   return (
     <footer className="on-dark relative overflow-hidden bg-ink text-white">
-      <div aria-hidden className="bg-grid-dark pointer-events-none absolute inset-0 opacity-50 [mask-image:linear-gradient(to_bottom,black,transparent_70%)]" />
+      <div aria-hidden className="grid-fade-dark pointer-events-none absolute inset-0 opacity-50 [--fade:linear-gradient(to_bottom,transparent,var(--color-ink)_70%)]" />
       <div className="container-x relative pt-20 lg:pt-28">
         {/* Signature line */}
         <div className="grid gap-10 border-b border-white/10 pb-14 lg:grid-cols-12 lg:items-end">

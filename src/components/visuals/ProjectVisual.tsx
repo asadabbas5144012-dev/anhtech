@@ -47,7 +47,9 @@ export function ProjectVisual({ project, className, priority = false }: { projec
               alt={preview.alt}
               width={preview.width}
               height={preview.height}
-              priority={priority}
+              preload={priority}
+              fetchPriority={priority ? "high" : undefined}
+              loading={priority ? "eager" : "lazy"}
               sizes="(min-width: 1024px) 55vw, 92vw"
               className="h-auto w-full motion-safe:transition-transform motion-safe:duration-[4s] motion-safe:ease-in-out motion-safe:group-hover:-translate-y-[40%]"
             />

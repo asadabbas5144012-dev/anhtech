@@ -26,7 +26,9 @@ export function ProjectCard({ project, layout = "stack", index }: { project: Pro
     <article className={cn("group relative", layout === "wide" && "grid gap-8 lg:grid-cols-12 lg:items-center lg:gap-12")}>
       <Link
         href={href}
-        aria-label={`${project.name} — view case study`}
+        // Decorative duplicate of the text link below: hidden from assistive tech and the tab order.
+        aria-hidden="true"
+        tabIndex={-1}
         className={cn(
           "relative block overflow-hidden rounded-[1.5rem] border border-line bg-mist",
           layout === "wide" ? "aspect-[16/11] lg:col-span-8 lg:aspect-[16/10]" : "aspect-[16/11]",
@@ -64,12 +66,12 @@ export function ProjectCard({ project, layout = "stack", index }: { project: Pro
           ))}
         </ul>
         <div className="mt-6 flex flex-wrap items-center gap-5">
-          <Link href={href} className="group/l inline-flex items-center gap-1.5 text-[0.9rem] font-semibold">
+          <Link href={href} aria-label={`View case study: ${project.name}`} className="group/l inline-flex items-center gap-1.5 text-[0.9rem] font-semibold">
             <span className="link-underline">{project.type === "concept" ? "Explore the concept" : "View case study"}</span>
             <ArrowUpRight aria-hidden className="h-4 w-4 transition-transform group-hover/l:-translate-y-0.5 group-hover/l:translate-x-0.5" />
           </Link>
           {project.url && (
-            <a href={project.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-[0.9rem] font-medium text-muted hover:text-ink">
+            <a href={project.url} target="_blank" rel="noopener noreferrer" aria-label={`Visit live site: ${project.name} (opens in a new tab)`} className="inline-flex items-center gap-1.5 text-[0.9rem] font-medium text-muted hover:text-ink">
               Visit live site <ExternalLink aria-hidden className="h-3.5 w-3.5" />
             </a>
           )}

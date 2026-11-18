@@ -112,7 +112,7 @@ export default function AboutPage() {
                   sizes="(min-width: 1024px) 40vw, 90vw"
                   className="h-auto w-full"
                 />
-                <figcaption className="absolute inset-x-4 bottom-4 flex items-center justify-between gap-3 rounded-2xl border border-white/40 bg-paper/85 px-5 py-4 backdrop-blur-md">
+                <figcaption className="absolute inset-x-4 bottom-4 flex items-center justify-between gap-3 rounded-2xl border border-white/40 bg-paper/95 px-5 py-4">
                   <div>
                     <p className="font-display text-lg font-bold leading-tight tracking-[-0.02em]">{founderName ?? "ANH Tech"}</p>
                     <p className="text-[0.85rem] text-ink-soft">{siteConfig.founder.role}</p>
@@ -182,7 +182,7 @@ export default function AboutPage() {
       <section aria-label="Mission and vision" className="py-24 lg:py-32">
         <div className="container-x grid gap-4 lg:grid-cols-2">
           <Reveal className="on-dark relative overflow-hidden rounded-[1.75rem] bg-forest p-8 text-white sm:p-12">
-            <div aria-hidden className="bg-grid-dark absolute inset-0 [mask-image:linear-gradient(to_top,black,transparent)]" />
+            <div aria-hidden className="grid-fade-dark absolute inset-0 [--fade:linear-gradient(to_top,transparent,var(--color-forest))]" />
             <div className="relative">
               <p className="eyebrow text-lime">Our mission</p>
               <h2 className="sr-only">Mission</h2>
@@ -237,7 +237,7 @@ export default function AboutPage() {
 
       {/* Founder-led approach */}
       <section aria-labelledby="founder-title" className="on-dark relative overflow-hidden bg-ink py-24 text-white lg:py-32">
-        <div aria-hidden className="bg-grid-dark absolute inset-0 [mask-image:radial-gradient(ellipse_at_top_right,black,transparent_70%)]" />
+        <div aria-hidden className="grid-fade-dark absolute inset-0 [--fade:radial-gradient(ellipse_at_top_right,transparent,var(--color-ink)_70%)]" />
         <div className="container-x relative grid gap-12 lg:grid-cols-12">
           <Reveal className="lg:col-span-5">
             <SectionIndex index="05" label="Founder-led" dark />

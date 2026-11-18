@@ -5,7 +5,7 @@ import { Reveal } from "@/components/ui/Reveal";
 export function WhyUs() {
   return (
     <section aria-labelledby="why-title" className="on-dark relative overflow-hidden bg-forest py-24 text-white lg:py-36">
-      <div aria-hidden className="bg-grid-dark pointer-events-none absolute inset-0 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
+      <div aria-hidden className="grid-fade-dark pointer-events-none absolute inset-0 [--fade:linear-gradient(to_bottom,transparent,var(--color-forest))]" />
       <div className="container-x relative">
         <SectionHeading
           dark

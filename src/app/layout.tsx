@@ -7,6 +7,8 @@ import { Footer } from "@/components/layout/Footer";
 import { JsonLd } from "@/components/ui/JsonLd";
 import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
 import { ScrollReset } from "@/components/layout/ScrollReset";
+import { RevealObserver } from "@/components/ui/RevealObserver";
+import { revealScript } from "@/lib/reveal-script";
 import { organizationSchema, websiteSchema } from "@/lib/seo";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -59,10 +61,14 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${jakarta.variable} ${manrope.variable}`}>
+    <html lang="en" className={`${jakarta.variable} ${manrope.variable}`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: revealScript }} />
+      </head>
       <body>
         <JsonLd data={[organizationSchema(), websiteSchema()]} />
         <ScrollReset />
+        <RevealObserver />
         <Header />
         <main id="main" tabIndex={-1} className="outline-none">
           {children}

@@ -20,7 +20,7 @@ export function FinalCta({
       <div className="container-x">
         <Reveal>
           <div className="on-dark relative isolate overflow-hidden rounded-[2rem] bg-forest px-6 py-16 text-white sm:px-12 lg:rounded-[2.5rem] lg:px-20 lg:py-24">
-            <div aria-hidden className="bg-grid-dark absolute inset-0 -z-10 [mask-image:linear-gradient(to_left,black,transparent_75%)]" />
+            <div aria-hidden className="grid-fade-dark absolute inset-0 -z-10 [--fade:linear-gradient(to_left,transparent,var(--color-forest)_75%)]" />
             <svg aria-hidden viewBox="0 0 400 400" className="absolute -right-24 -top-24 -z-10 w-[26rem] opacity-80 lg:-right-10 lg:-top-10 lg:w-[32rem]">
               <circle cx="200" cy="200" r="190" fill="none" stroke="rgba(200,241,105,0.25)" />
               <circle cx="200" cy="200" r="130" fill="none" stroke="rgba(200,241,105,0.35)" strokeDasharray="4 8" />

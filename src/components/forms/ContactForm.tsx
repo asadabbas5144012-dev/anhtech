@@ -1,7 +1,6 @@
 "use client";
 
 import { useId, useRef, useState, type ReactNode } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { AlertCircle, ArrowUpRight, CheckCircle2, Loader2 } from "lucide-react";
 import { serviceOptions } from "@/data/services";
 import {
@@ -73,7 +72,6 @@ function Field({
 
 export function ContactForm({ initialService = "" }: { initialService?: string }) {
   const uid = useId();
-  const reduce = useReducedMotion();
   const preset = (serviceOptions as readonly string[]).includes(initialService) ? initialService : "";
   const [data, setData] = useState<Inquiry>({ ...emptyInquiry, service: preset });
   const [errors, setErrors] = useState<InquiryErrors>({});
@@ -164,12 +162,10 @@ export function ContactForm({ initialService = "" }: { initialService?: string }
   if (status === "success") {
     const first = data.name.split(" ")[0];
     return (
-      <motion.div
-        initial={reduce ? false : { opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
+      <div
         role="status"
         aria-live="polite"
-        className="rounded-[1.75rem] border border-line bg-paper p-8 sm:p-12"
+        className="animate-rise rounded-[1.75rem] border border-line bg-paper p-8 sm:p-12"
       >
         <span className="flex h-14 w-14 items-center justify-center rounded-full bg-lime">
           <CheckCircle2 aria-hidden className="h-7 w-7 text-forest" />
@@ -202,7 +198,7 @@ export function ContactForm({ initialService = "" }: { initialService?: string }
         >
           Send another inquiry
         </button>
-      </motion.div>
+      </div>
     );
   }
 
@@ -393,14 +389,10 @@ export function ContactForm({ initialService = "" }: { initialService?: string }
         <input ref={honeypot} id={`${uid}-fax`} type="text" name="fax" tabIndex={-1} autoComplete="off" defaultValue="" />
       </div>
 
-      <AnimatePresence>
         {status === "error" && serverMessage && (
-          <motion.div
-            initial={reduce ? false : { opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
+          <div
             role="alert"
-            className="mt-8 overflow-hidden rounded-xl border border-red-200 bg-red-50 p-4 text-[0.9rem] text-red-800"
+            className="animate-fade-in mt-8 overflow-hidden rounded-xl border border-red-200 bg-red-50 p-4 text-[0.9rem] text-red-800"
           >
             <p className="flex items-start gap-2 font-medium">
               <AlertCircle aria-hidden className="mt-0.5 h-4 w-4 shrink-0" />
@@ -417,9 +409,8 @@ export function ContactForm({ initialService = "" }: { initialService?: string }
                 ))}
               </ul>
             )}
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
 
       <div className="mt-8 flex flex-col-reverse items-start gap-5 border-t border-line pt-8 sm:flex-row sm:items-center sm:justify-between">
         <p className="max-w-xs text-[0.78rem] leading-relaxed text-muted">

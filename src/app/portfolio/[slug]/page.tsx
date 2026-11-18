@@ -13,6 +13,7 @@ import { SectionIndex } from "@/components/ui/Section";
 import { ProjectVisual } from "@/components/visuals/ProjectVisual";
 import { ProjectTypeBadge } from "@/components/sections/ProjectCard";
 import { FinalCta } from "@/components/sections/FinalCta";
+import { LazyMount } from "@/components/ui/LazyMount";
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -51,7 +52,7 @@ function BrowserFrame({ host, children, className }: { host: string; children: R
 }
 
 const Shot = ({ image, sizes, priority, unoptimized }: { image: ProjectImage; sizes: string; priority?: boolean; unoptimized?: boolean }) => (
-  <Image src={image.src} alt={image.alt} width={image.width} height={image.height} sizes={sizes} priority={priority} unoptimized={unoptimized} className="block h-auto w-full bg-mist" />
+  <Image src={image.src} alt={image.alt} width={image.width} height={image.height} sizes={sizes} preload={priority} fetchPriority={priority ? "high" : undefined} loading={priority ? "eager" : "lazy"} unoptimized={unoptimized} className="block h-auto w-full bg-mist" />
 );
 
 export default async function ProjectPage({ params }: Params) {
@@ -83,7 +84,7 @@ export default async function ProjectPage({ params }: Params) {
                 <RevealWords text={p.name} />
               </h1>
             </div>
-            <Reveal delay={0.2} className="lg:col-span-5">
+            <div className="lg:col-span-5">
               <p className="lead">{p.description}</p>
               {p.url && (
                 <div className="mt-6">
@@ -92,13 +93,13 @@ export default async function ProjectPage({ params }: Params) {
                   </ButtonLink>
                 </div>
               )}
-            </Reveal>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Cover */}
-      <Reveal className="container-x">
+      {/* Cover (above the fold: rendered immediately, it is the LCP element) */}
+      <div className="container-x">
         {p.images ? (
           <div className="relative overflow-hidden rounded-[1.75rem] bg-mist p-3 sm:p-8 lg:p-14">
             <div aria-hidden className="bg-grid absolute inset-0 opacity-70" />
@@ -111,7 +112,7 @@ export default async function ProjectPage({ params }: Params) {
             <ProjectVisual project={p} priority className="absolute inset-0" />
           </div>
         )}
-      </Reveal>
+      </div>
 
       <section aria-label="Project details" className="py-20 lg:py-28">
         <div className="container-x grid gap-14 lg:grid-cols-12">
@@ -230,7 +231,9 @@ export default async function ProjectPage({ params }: Params) {
                       aria-label={`Scrollable full-page view of ${p.name}`}
                       className="max-h-[38rem] overflow-y-auto overscroll-contain [scrollbar-width:thin] lg:max-h-[52rem]"
                     >
-                      <Shot image={p.images.fullPage} sizes="(min-width: 1024px) 480px, 95vw" unoptimized />
+                      <LazyMount aspect={p.images.fullPage.width / p.images.fullPage.height} placeholderClassName="w-full bg-mist">
+                        <Shot image={p.images.fullPage} sizes="(min-width: 1024px) 480px, 95vw" unoptimized />
+                      </LazyMount>
                     </div>
                   </BrowserFrame>
                   <p className="mt-3 text-center text-[0.8rem] text-muted">Scroll inside the frame to view the full page</p>
@@ -240,7 +243,9 @@ export default async function ProjectPage({ params }: Params) {
                 {p.images.gallery.map((g, i) => (
                   <Reveal key={g.src} delay={i * 0.06}>
                     <BrowserFrame host={host} className={g.width < 700 ? "mx-auto max-w-[18rem]" : undefined}>
-                      <Shot image={g} sizes="(min-width: 1024px) 700px, 95vw" />
+                      <LazyMount aspect={g.width / g.height} placeholderClassName="w-full bg-mist">
+                        <Shot image={g} sizes="(min-width: 1024px) 700px, 95vw" />
+                      </LazyMount>
                     </BrowserFrame>
                   </Reveal>
                 ))}

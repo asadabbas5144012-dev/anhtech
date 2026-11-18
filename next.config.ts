@@ -7,8 +7,22 @@ const securityHeaders = [
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
 ];
 
+/**
+ * Canonical site URL:
+ * 1. NEXT_PUBLIC_SITE_URL when set (use this once you have a custom domain)
+ * 2. On Vercel production deployments, the project's production URL
+ *    (e.g. anhtech.vercel.app), provided automatically by Vercel
+ * 3. Otherwise empty → the site serves noindex (local builds, preview deployments)
+ */
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (process.env.VERCEL_ENV === "production" && process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : "");
+
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  env: { NEXT_PUBLIC_SITE_URL: siteUrl },
   images: { formats: ["image/avif", "image/webp"] },
   async headers() {
     return [{ source: "/(.*)", headers: securityHeaders }];
