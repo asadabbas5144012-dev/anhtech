@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { siteConfig, absoluteUrl } from "@/config/site";
+import { coFounder } from "@/data/team";
 
 interface PageSeo {
   title?: string;
@@ -75,7 +76,12 @@ export function organizationSchema() {
       : {}),
     ...(sameAs().length ? { sameAs: sameAs() } : {}),
     ...(siteConfig.founder.name
-      ? { founder: { "@type": "Person", name: siteConfig.founder.name, jobTitle: siteConfig.founder.role } }
+      ? {
+          founder: [
+            { "@type": "Person", name: siteConfig.founder.name, jobTitle: siteConfig.founder.role },
+            { "@type": "Person", name: coFounder.name, jobTitle: coFounder.role },
+          ],
+        }
       : {}),
   };
 }
@@ -89,6 +95,19 @@ export function websiteSchema() {
     url: siteConfig.url,
     inLanguage: "en",
     publisher: { "@id": absoluteUrl("/#organization") },
+  };
+}
+
+/** Person schema for the co-founder. */
+export function coFounderSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: coFounder.name,
+    jobTitle: coFounder.role,
+    image: absoluteUrl(coFounder.photo.src),
+    worksFor: { "@id": absoluteUrl("/#organization") },
+    ...(coFounder.linkedin ? { sameAs: [coFounder.linkedin] } : {}),
   };
 }
 

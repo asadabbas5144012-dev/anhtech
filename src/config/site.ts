@@ -53,7 +53,7 @@ export const siteConfig = {
     role: "CEO & Founder",
     /** Professional portrait (background replaced). */
     photo: "/assets/team/founder-portrait.webp" as string | null,
-    linkedin: null as string | null,
+    linkedin: "https://www.linkedin.com/in/asad-abbas-285815425/" as string | null,
   },
 
   /**

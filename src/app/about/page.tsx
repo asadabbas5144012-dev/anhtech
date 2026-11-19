@@ -4,7 +4,8 @@ import { whatsappLink } from "@/lib/contact";
 import { MessagesSquare, Ruler, Hammer, LifeBuoy, UserRound } from "lucide-react";
 import { values } from "@/data/content";
 import { siteConfig } from "@/config/site";
-import { createMetadata, personSchema } from "@/lib/seo";
+import { coFounderSchema, createMetadata, personSchema } from "@/lib/seo";
+import { coFounder } from "@/data/team";
 import { PageHero } from "@/components/sections/PageHero";
 import { FinalCta } from "@/components/sections/FinalCta";
 import { ButtonLink, TextLink } from "@/components/ui/Button";
@@ -32,7 +33,7 @@ export default function AboutPage() {
   const founderPhoto = siteConfig.founder.photo;
   return (
     <>
-      <JsonLd data={personSchema()} />
+      <JsonLd data={[personSchema(), coFounderSchema()]} />
       <PageHero
         crumbs={[{ name: "About", path: "/about" }]}
         eyebrow="About ANH Tech"
@@ -168,7 +169,7 @@ export default function AboutPage() {
                   )}
                   {siteConfig.founder.linkedin && (
                     <ButtonLink href={siteConfig.founder.linkedin} variant="ghost" arrow={false}>
-                      LinkedIn
+                      Connect on LinkedIn
                     </ButtonLink>
                   )}
                 </div>
@@ -178,8 +179,84 @@ export default function AboutPage() {
         </section>
       )}
 
+      {/* Meet the co-founder */}
+      <section aria-labelledby="meet-cofounder-title" className="py-24 lg:py-32">
+        <div className="container-x grid items-center gap-14 lg:grid-cols-12 lg:gap-16">
+          <Reveal className="relative mx-auto w-full max-w-md lg:order-2 lg:col-span-5 lg:col-start-8 lg:max-w-none">
+            <div aria-hidden className="absolute -right-4 -top-4 h-2/3 w-2/3 rounded-[2rem] bg-forest sm:-right-6 sm:-top-6" />
+            <figure className="relative overflow-hidden rounded-[1.75rem] border border-line bg-mist shadow-[0_40px_80px_-40px_rgb(23_25_24/0.45)]">
+              <Image
+                src={coFounder.photo.src}
+                alt={`${coFounder.name}, ${coFounder.role} of ANH Tech`}
+                width={coFounder.photo.width}
+                height={coFounder.photo.height}
+                sizes="(min-width: 1024px) 40vw, 90vw"
+                className="h-auto w-full"
+              />
+              <figcaption className="absolute inset-x-4 bottom-4 flex items-center justify-between gap-3 rounded-2xl border border-white/40 bg-paper/95 px-5 py-4">
+                <div>
+                  <p className="font-display text-lg font-bold leading-tight tracking-[-0.02em]">{coFounder.name}</p>
+                  <p className="text-[0.85rem] text-ink-soft">{coFounder.role}</p>
+                </div>
+                <LogoMark className="h-9 w-9" />
+              </figcaption>
+            </figure>
+          </Reveal>
+
+          <div className="lg:order-1 lg:col-span-7">
+            <Reveal>
+              <SectionIndex index="03" label="Meet the co-founder" />
+              <h2 id="meet-cofounder-title" className="display-md mt-5">
+                {coFounder.name}. <span className="text-muted">Building relationships that help businesses grow.</span>
+              </h2>
+            </Reveal>
+            <Reveal delay={0.08}>
+              <p className="lead mt-8">{coFounder.headline}</p>
+              {coFounder.bio.map((para) => (
+                <p key={para.slice(0, 24)} className="mt-5 leading-relaxed text-ink-soft">
+                  {para}
+                </p>
+              ))}
+            </Reveal>
+            <Reveal delay={0.12}>
+              <h3 className="eyebrow mt-10 text-muted">What he does</h3>
+              <ul className="mt-4 grid gap-2 sm:grid-cols-2">
+                {coFounder.focus.map((item) => (
+                  <li key={item} className="flex items-start gap-2.5 text-[0.95rem] leading-snug">
+                    <span aria-hidden className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-lime ring-4 ring-lime/25" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <h3 className="eyebrow mt-8 text-muted">Who he works with</h3>
+              <ul className="mt-4 flex flex-wrap gap-2">
+                {coFounder.worksWith.map((w) => (
+                  <li key={w} className="rounded-full border border-line bg-paper px-3.5 py-1.5 text-sm">
+                    {w}
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
+            <Reveal delay={0.16}>
+              <div className="mt-10 flex flex-wrap gap-3">
+                {coFounder.linkedin && (
+                  <ButtonLink href={coFounder.linkedin} arrow={false}>
+                    Connect on LinkedIn
+                  </ButtonLink>
+                )}
+                {coFounder.email && (
+                  <ButtonLink href={`mailto:${coFounder.email}?subject=${encodeURIComponent("Partnership inquiry")}`} variant="outline" arrow={false}>
+                    Email Saqib
+                  </ButtonLink>
+                )}
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
       {/* Mission & vision */}
-      <section aria-label="Mission and vision" className="py-24 lg:py-32">
+      <section aria-label="Mission and vision" className="pb-24 lg:pb-32">
         <div className="container-x grid gap-4 lg:grid-cols-2">
           <Reveal className="on-dark relative overflow-hidden rounded-[1.75rem] bg-forest p-8 text-white sm:p-12">
             <div aria-hidden className="grid-fade-dark absolute inset-0 [--fade:linear-gradient(to_top,transparent,var(--color-forest))]" />
@@ -204,7 +281,7 @@ export default function AboutPage() {
       {/* Values */}
       <section aria-labelledby="values-title" className="border-y border-line bg-paper py-24 lg:py-32">
         <div className="container-x">
-          <SectionHeading index="03" label="Our values" title={<span id="values-title">What we stand for.</span>} intro="Six values guide every recommendation we make and every line of code we write." />
+          <SectionHeading index="04" label="Our values" title={<span id="values-title">What we stand for.</span>} intro="Six values guide every recommendation we make and every line of code we write." />
           <ul className="mt-14 grid gap-px overflow-hidden rounded-[1.5rem] border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
             {values.map((v, i) => (
               <Reveal as="li" key={v.title} delay={(i % 3) * 0.06} className="group bg-paper p-8 transition-colors hover:bg-canvas lg:p-10">
@@ -220,7 +297,7 @@ export default function AboutPage() {
       {/* How we work */}
       <section aria-labelledby="how-title" className="py-24 lg:py-32">
         <div className="container-x">
-          <SectionHeading index="04" label="How we work" title={<span id="how-title">Simple principles, applied consistently.</span>} />
+          <SectionHeading index="05" label="How we work" title={<span id="how-title">Simple principles, applied consistently.</span>} />
           <ul className="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {principles.map((p, i) => (
               <Reveal as="li" key={p.title} delay={i * 0.07} className="rounded-[1.5rem] border border-line bg-paper p-7">
@@ -240,7 +317,7 @@ export default function AboutPage() {
         <div aria-hidden className="grid-fade-dark absolute inset-0 [--fade:radial-gradient(ellipse_at_top_right,transparent,var(--color-ink)_70%)]" />
         <div className="container-x relative grid gap-12 lg:grid-cols-12">
           <Reveal className="lg:col-span-5">
-            <SectionIndex index="05" label="Founder-led" dark />
+            <SectionIndex index="06" label="Founder-led" dark />
             <h2 id="founder-title" className="display-md mt-5">
               The person you talk to is the person <span className="text-lime">who builds it.</span>
             </h2>
